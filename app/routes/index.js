@@ -1,57 +1,22 @@
-'use strict';
+module.exports = function(app, db){
 
-var path = process.cwd();
-var ClickHandler = require(path + '/app/controllers/clickHandler.server.js');
+    app.get('/', function(request, response){
+       //send intro webpage
+    });
+    
+    app.get('/new:newwebsite', function(request, response){
+        //check if newwebsite is in db
+        //if in db, send info
+        //if not in db, add it and send info
+    });
+    
+    app.get('/:website', function(request, response){
+        //check if website is in db
+        //redirect if it is or send error message if it is not
+    })
+    
+    function verifyWebsite(wsstr){
+        //check if string is a valid web address
+    }
 
-module.exports = function (app, passport) {
-
-	function isLoggedIn (req, res, next) {
-		if (req.isAuthenticated()) {
-			return next();
-		} else {
-			res.redirect('/login');
-		}
-	}
-
-	var clickHandler = new ClickHandler();
-
-	app.route('/')
-		.get(isLoggedIn, function (req, res) {
-			res.sendFile(path + '/public/index.html');
-		});
-
-	app.route('/login')
-		.get(function (req, res) {
-			res.sendFile(path + '/public/login.html');
-		});
-
-	app.route('/logout')
-		.get(function (req, res) {
-			req.logout();
-			res.redirect('/login');
-		});
-
-	app.route('/profile')
-		.get(isLoggedIn, function (req, res) {
-			res.sendFile(path + '/public/profile.html');
-		});
-
-	app.route('/api/:id')
-		.get(isLoggedIn, function (req, res) {
-			res.json(req.user.github);
-		});
-
-	app.route('/auth/github')
-		.get(passport.authenticate('github'));
-
-	app.route('/auth/github/callback')
-		.get(passport.authenticate('github', {
-			successRedirect: '/',
-			failureRedirect: '/login'
-		}));
-
-	app.route('/api/:id/clicks')
-		.get(isLoggedIn, clickHandler.getClicks)
-		.post(isLoggedIn, clickHandler.addClick)
-		.delete(isLoggedIn, clickHandler.resetClicks);
-};
+}
